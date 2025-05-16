@@ -1,0 +1,13 @@
+{
+  "workbench.editor.labelFormat": "short",
+  "github.gitAuthentication": false,
+  "workbench.tree.renderIndentGuides": "always",
+  "workbench.tree.indent": 12,
+  "workbench.editor.pinnedTabSizing": "normal",
+  "workbench.editor.pinnedTabsOnSeparateRow": true,
+  "workbench.editor.wrapTabs": true,
+  "workbench.editor.limit.enabled": true,
+  "workbench.editor.limit.value": 6,
+  "files.eol": "\n",
+  "prettier.endOfLine": "lf"
+}

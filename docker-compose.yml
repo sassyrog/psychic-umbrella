@@ -1,0 +1,73 @@
+services:
+  api:
+    container_name: ro_api_dev
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
+    command: npm run start:dev
+    ports:
+      - '3000:3000'
+    volumes:
+      - .:/app
+      - node_modules:/app/node_modules
+    environment:
+      - NODE_ENV=development
+      - PNPM_HOME=/app/.pnpm-store
+    env_file:
+      - .env.${APP_ENV:-dev}
+    depends_on:
+      - postgres
+    restart: unless-stopped
+    networks:
+      - ro-network
+    profiles:
+      - full
+
+  postgres:
+    container_name: postgres_db
+    image: postgres:15-alpine
+    ports:
+      - '5432:5432'
+    environment:
+      - POSTGRES_DB=ro-db
+    env_file:
+      - .env.${APP_ENV:-dev}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    networks:
+      - ro-network
+    profiles:
+      - full
+      - no-api
+
+  redis:
+    image: redis:latest
+    container_name: ro_redis
+    ports:
+      - '6379:6379'
+    volumes:
+      - ro_redis:/data
+    networks:
+      - ro-network
+    restart: always
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    profiles:
+      - full
+      - no-api
+
+networks:
+  ro-network:
+    name: ro-network
+    driver: bridge
+
+volumes:
+  postgres_data:
+  ro_redis:
+  node_modules:
