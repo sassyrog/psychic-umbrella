@@ -6,6 +6,8 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { RestLoggingMiddleware } from './middleware/rest_logging.middleware';
 import { UsersModule } from './modules/users/users.module';
+import { RedisModule } from './core/redis/redis.module';
+import { WebsocketsModule } from './core/websockets/websockets.module';
 
 @Module({
   imports: [
@@ -31,6 +33,9 @@ import { UsersModule } from './modules/users/users.module';
       throttlers: [{ ttl: 60000, limit: 10 }],
     }),
     UsersModule,
+
+    RedisModule,
+    WebsocketsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
